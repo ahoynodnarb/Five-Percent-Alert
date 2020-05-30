@@ -1,9 +1,9 @@
-Package: com.brandonyao.percentagenotifier
-Name: percentagenotifier
+Package: com.popsicletreehouse.fivepercentalert
+Name: fivepercentalert
 Depends: mobilesubstrate
 Version: 0.0.1
 Architecture: iphoneos-arm
 Description: An awesome MobileSubstrate tweak!
-Maintainer: Brandon Yao
-Author: Brandon Yao
+Maintainer: PopsicleTreehouse
+Author: PopsicleTreehouse
 Section: Tweaks
