@@ -1,13 +1,15 @@
-THEOS_DEVICE_IP = localhost
-
-THEOS_DEVICE_PORT = 2222
+ARCHS = arm64 arm64e
+THEOS_DEVICE_IP=localhost
+THEOS_DEVICE_PORT=2222
+TARGET=iphone:13.0
 
 INSTALL_TARGET_PROCESSES = SpringBoard
+
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = percentagenotifier
+TWEAK_NAME = fivepercentalert
 
-percentagenotifier_FILES = Tweak.xm
-percentagenotifier_CFLAGS = -fobjc-arc
+fivepercentalert_FILES = Tweak.xm
+fivepercentalert_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
