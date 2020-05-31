@@ -24,29 +24,33 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSSliderCell</string>
+			<string>PSEditTextCell</string>
+			<key>cellClass</key>
+			<string>CSPValueCell</string>
 			<key>defaults</key>
 			<string>com.popsicletreehouse.fivepercentalertprefs</string>
-			<key>isSegmented</key>
+			<key>detail</key>
+			<string>PSDetailController</string>
+			<key>isDecimalPad</key>
 			<true/>
 			<key>key</key>
 			<string>whenAlertShows</string>
-			<key>max</key>
-			<real>100</real>
-			<key>min</key>
-			<real>5</real>
-			<key>segmentCount</key>
-			<integer>22</integer>
-			<key>showValue</key>
-			<true/>
+			<key>label</key>
+			<string>Battery when alert is shown</string>
+			<key>placeHolder</key>
+			<string>5</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
 			<key>label</key>
-			<string>Settings</string>
-			<key>footerText</key>
-			<string>Respring to enact changes.</string>
+			<string>Respring</string>
+			<key>action</key>
+			<string>respring</string>
 		</dict>
 		</array>
 	<key>title</key>
