@@ -12,7 +12,15 @@ static bool recharged = false;
 //connects Root.plist to Tweak.xm
 NSDictionary *bundleDefaults = [[NSUserDefaults standardUserDefaults]persistentDomainForName:@"com.popsicletreehouse.fivepercentalertprefs"];
 id isEnabled = [bundleDefaults valueForKey:@"isEnabled"];
-float whenAlertShow = [[[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.popsicletreehouse.fivepercentalertprefs.plist"] objectForKey:@"whenAlertShows"] floatValue];
+NSInteger whenAlertShowInt = [[bundleDefaults objectForKey:@"whenAlertShows"] integerValue];
+float whenAlertShow = (float)whenAlertShowInt;
+
+if(whenAlertShow < 1.0){
+	whenAlertShow = 1.0;
+}
+if(whenAlertShow > 100.0){
+	whenAlertShow = 100.0;
+}
 
 if ([isEnabled isEqual:@0]) {
 		%orig;
@@ -26,10 +34,10 @@ else{
     float battery = whenAlertShow/100.00;
 	int batRemaining = (int) whenAlertShow;
     if (myDeviceCharge <= battery && alertShown == false) {
-		NSString* lowBatteryAlertstr = [NSString stringWithFormat:@"%i battery remaining.", batRemaining];
+		NSString* lowBatteryAlertstr = [NSString stringWithFormat:@"%i%% battery remaining.", batRemaining];
 		AudioServicesPlaySystemSound(1503);
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Low Power" message:lowBatteryAlertstr preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
+		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
 		[alertController addAction:confirmAction];
 		[[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:^{}];
         alertShown = true;
