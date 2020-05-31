@@ -1,23 +1,37 @@
-//ignores deprecated warning									//reminder: Figure out whether you need firstAlert or not
+#import <AudioToolbox/AudioServices.h>
+
+%hook SBLowPowerAlertItem
++(BOOL)_shouldIgnoreChangeToBatteryLevel:(unsigned)arg1 {
+//ignores deprecated warning
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 static bool alertShown = false;
 static bool firstAlert = true;
 static bool recharged = false;
-%hook SBLowPowerAlertItem
+//connects Root.plist to Tweak.xm
+NSDictionary *bundleDefaults = [[NSUserDefaults standardUserDefaults]persistentDomainForName:@"com.popsicletreehouse.fivepercentalertprefs"];
+id isEnabled = [bundleDefaults valueForKey:@"isEnabled"];
+float whenAlertShow = [[[NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.popsicletreehouse.fivepercentalertprefs.plist"] objectForKey:@"whenAlertShows"] floatValue];
 
-+(BOOL)_shouldIgnoreChangeToBatteryLevel:(unsigned)arg1 {
-    %orig;
-    UIDevice *myDevice = [UIDevice currentDevice];
+if ([isEnabled isEqual:@0]) {
+		%orig;
+}
+else{
+	%orig;
+	UIDevice *myDevice = [UIDevice currentDevice];
     [myDevice setBatteryMonitoringEnabled:YES];
+	float myDeviceCharge = myDevice.batteryLevel;
 
-    float myDeviceCharge = myDevice.batteryLevel;
-    float battery = 0.05;
+    float battery = whenAlertShow/100.00;
+	int batRemaining = (int) whenAlertShow;
     if (myDeviceCharge <= battery && alertShown == false) {
-        //creates alert
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Low Power" message:@"5 battery remaining." delegate:nil cancelButtonTitle:@"close" otherButtonTitles:nil];
-        //shows alert
-        [alert show];
+		NSString* lowBatteryAlertstr = [NSString stringWithFormat:@"%i battery remaining.", batRemaining];
+		AudioServicesPlaySystemSound(1503);
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Low Power" message:lowBatteryAlertstr preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
+		[alertController addAction:confirmAction];
+		[[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:^{}];
         alertShown = true;
         firstAlert = false;
     }
@@ -29,6 +43,7 @@ static bool recharged = false;
     else if (!firstAlert && myDeviceCharge < battery && recharged){
         alertShown = false;
     }
+}
 return %orig;
 }
 %end
