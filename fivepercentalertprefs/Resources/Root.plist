@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>When Alert Shows</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.popsicletreehouse.fivepercentalertprefs</string>
+			<key>label</key>
+			<string>Enable Tweak</string>
+			<key>key</key>
+			<string>isEnabled</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>defaults</key>
+			<string>com.popsicletreehouse.fivepercentalertprefs</string>
+			<key>isSegmented</key>
+			<true/>
+			<key>key</key>
+			<string>whenAlertShows</string>
+			<key>max</key>
+			<real>100</real>
+			<key>min</key>
+			<real>5</real>
+			<key>segmentCount</key>
+			<integer>22</integer>
+			<key>showValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Settings</string>
+			<key>footerText</key>
+			<string>Respring to enact changes.</string>
+		</dict>
+		</array>
+	<key>title</key>
+	<string>Five Percent Alert</string>
+</dict>
+</plist>
