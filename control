@@ -3,7 +3,7 @@ Name: fivepercentalert
 Depends: mobilesubstrate
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Show low power alert at whatever battery level you want
 Maintainer: PopsicleTreehouse
 Author: PopsicleTreehouse
 Section: Tweaks
