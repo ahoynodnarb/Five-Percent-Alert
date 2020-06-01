@@ -1,8 +1,6 @@
 #import <AudioToolbox/AudioServices.h>
 
 static bool alertShown = false;
-static bool firstAlert = true;
-static bool recharged = false;
 
 static BOOL isEnabled = YES;
 static float alertShowPercentage;
@@ -30,14 +28,7 @@ static float alertShowPercentage;
 		[alertController addAction:confirmAction];
 		[[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:^{}];
 		alertShown = true;
-		firstAlert = false;
-	}
-	// in case battery recharged
-	if (myDeviceCharge > batteryThreshold && !firstAlert) {
-		recharged = true;
-	}
-	// in case battery recharged but back to low health again allows looping back to first if statement
-	else if (!firstAlert && myDeviceCharge < batteryThreshold && recharged) {
+	} else if (myDeviceCharge > batteryThreshold && alertShown) {
 		alertShown = false;
 	}
 	
