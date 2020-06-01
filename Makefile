@@ -1,14 +1,15 @@
 ARCHS = arm64 arm64e
-THEOS_DEVICE_IP=localhost
-THEOS_DEVICE_PORT=2222
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = fivepercentalert
+TWEAK_NAME = FivePercentAlert
 
-fivepercentalert_FILES = Tweak.xm
-fivepercentalert_CFLAGS = -fobjc-arc
+FivePercentAlert_FILES = Tweak.xm
+FivePercentAlert_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
+
+SUBPROJECTS += fivepercentalertprefs
+include $(THEOS_MAKE_PATH)/aggregate.mk

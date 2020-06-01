@@ -9,6 +9,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>When Alert Shows</string>
+			<key>footerText</key>
+			<string>Set your preferred battery percentage at which the alert will be shown.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -18,9 +20,11 @@
 			<key>defaults</key>
 			<string>com.popsicletreehouse.fivepercentalertprefs</string>
 			<key>label</key>
-			<string>Enable Tweak</string>
+			<string>Enable tweak</string>
 			<key>key</key>
 			<string>isEnabled</string>
+			<key>PostNotification</key>
+			<string>com.popsicletreehouse.fivepercentalert.prefschanged</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -36,23 +40,15 @@
 			<key>key</key>
 			<string>whenAlertShows</string>
 			<key>label</key>
-			<string>Battery when alert is shown</string>
+			<string>Battery percentage</string>
+			<key>default</key>
+			<string>5</string>
 			<key>placeHolder</key>
 			<string>5</string>
+			<key>PostNotification</key>
+			<string>com.popsicletreehouse.fivepercentalert.prefschanged</string>
 		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>label</key>
-			<string>Respring</string>
-			<key>action</key>
-			<string>respring</string>
-		</dict>
-		</array>
+	</array>
 	<key>title</key>
 	<string>Five Percent Alert</string>
 </dict>
