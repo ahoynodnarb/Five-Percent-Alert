@@ -16,7 +16,7 @@ static float alertShowPercentage;
 	BOOL wasEnabled = myDevice.batteryMonitoringEnabled;
 	if (!wasEnabled) [myDevice setBatteryMonitoringEnabled:YES];
 	float myDeviceCharge = myDevice.batteryLevel;
-	if (!wasEnabled) [myDevice setBatteryMonitoringEnabled:wasEnabled]; // restore it back to what it was
+	if (!wasEnabled) [myDevice setBatteryMonitoringEnabled:NO]; // restore it back to what it was
 
 	float batteryThreshold = alertShowPercentage/100.00;
 
