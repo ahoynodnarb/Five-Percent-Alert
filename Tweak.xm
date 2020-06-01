@@ -46,10 +46,10 @@ static void refreshPrefs() {
 	NSInteger alertShowPercentageInt = [([bundleDefaults objectForKey:@"whenAlertShows"] ?: @(5)) integerValue];
 	alertShowPercentage = (float)alertShowPercentageInt;
 
-	if (alertShowPercentage < 1.0){
+	if (alertShowPercentage < 1.0) {
 		alertShowPercentage = 1.0;
 	}
-	if (alertShowPercentage > 100.0){
+	if (alertShowPercentage > 100.0) {
 		alertShowPercentage = 100.0;
 	}
 
@@ -59,7 +59,7 @@ static void refreshPrefs() {
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    refreshPrefs();
+	refreshPrefs();
 }
 
 %ctor {
