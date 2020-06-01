@@ -1,57 +1,68 @@
 #import <AudioToolbox/AudioServices.h>
 
-%hook SBLowPowerAlertItem
-+(BOOL)_shouldIgnoreChangeToBatteryLevel:(unsigned)arg1 {
-//ignores deprecated warning
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
 static bool alertShown = false;
-static bool firstAlert = true;
-static bool recharged = false;
-//connects Root.plist to Tweak.xm
-NSDictionary *bundleDefaults = [[NSUserDefaults standardUserDefaults]persistentDomainForName:@"com.popsicletreehouse.fivepercentalertprefs"];
-id isEnabled = [bundleDefaults valueForKey:@"isEnabled"];
-NSInteger whenAlertShowInt = [[bundleDefaults objectForKey:@"whenAlertShows"] integerValue];
-float whenAlertShow = (float)whenAlertShowInt;
 
-if(whenAlertShow < 1.0){
-	whenAlertShow = 1.0;
-}
-if(whenAlertShow > 100.0){
-	whenAlertShow = 100.0;
-}
+static BOOL isEnabled = YES;
+static float alertShowPercentage;
 
-if ([isEnabled isEqual:@0]) {
-		%orig;
-}
-else{
-	%orig;
+%hook SBLowPowerAlertItem
+
++(BOOL)_shouldIgnoreChangeToBatteryLevel:(unsigned)arg1 {
+	HBLogDebug(@"_shouldIgnoreChangeToBatteryLevel has been called");
+
+	if (!isEnabled) return %orig;
+
 	UIDevice *myDevice = [UIDevice currentDevice];
-    [myDevice setBatteryMonitoringEnabled:YES];
+	BOOL wasEnabled = myDevice.batteryMonitoringEnabled;
+	if (!wasEnabled) [myDevice setBatteryMonitoringEnabled:YES];
 	float myDeviceCharge = myDevice.batteryLevel;
+	if (!wasEnabled) [myDevice setBatteryMonitoringEnabled:wasEnabled]; // restore it back to what it was
 
-    float battery = whenAlertShow/100.00;
-	int batRemaining = (int) whenAlertShow;
-    if (myDeviceCharge <= battery && alertShown == false) {
-		NSString* lowBatteryAlertstr = [NSString stringWithFormat:@"%i%% battery remaining.", batRemaining];
+	float batteryThreshold = alertShowPercentage/100.00;
+
+	if (myDeviceCharge <= batteryThreshold && !alertShown) {
+		NSString* lowBatteryAlertstr = [NSString stringWithFormat:@"%d%% battery remaining.", (int)alertShowPercentage];
 		AudioServicesPlaySystemSound(1503);
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Low Power" message:lowBatteryAlertstr preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Low Battery" message:lowBatteryAlertstr preferredStyle:UIAlertControllerStyleAlert];
 		UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
 		[alertController addAction:confirmAction];
 		[[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:^{}];
-        alertShown = true;
-        firstAlert = false;
-    }
-	//in case battery recharged
-    if(myDeviceCharge > battery && !firstAlert) {
-        recharged = true;
-    }
-	//in case battery recharged but back to low health again allows looping back to first if statement
-    else if (!firstAlert && myDeviceCharge < battery && recharged){
-        alertShown = false;
-    }
+		alertShown = true;
+	} else if (myDeviceCharge > batteryThreshold && alertShown) {
+		alertShown = false;
+	}
+	
+	return %orig;
 }
-return %orig;
-}
+
 %end
+
+static void refreshPrefs() {
+	HBLogDebug(@"Refreshing preferences...");
+
+	NSDictionary *bundleDefaults = [[NSUserDefaults standardUserDefaults]persistentDomainForName:@"com.popsicletreehouse.fivepercentalertprefs"];
+
+	isEnabled = [([bundleDefaults objectForKey:@"isEnabled"] ?: @(YES)) boolValue];
+	NSInteger alertShowPercentageInt = [([bundleDefaults objectForKey:@"whenAlertShows"] ?: @(5)) integerValue];
+	alertShowPercentage = (float)alertShowPercentageInt;
+
+	if (alertShowPercentage < 1.0) {
+		alertShowPercentage = 1.0;
+	}
+	if (alertShowPercentage > 100.0) {
+		alertShowPercentage = 100.0;
+	}
+
+	alertShown = false;
+
+	HBLogDebug(@"isEnabled = %d, alertShowPercentage = %ld", isEnabled, (long)alertShowPercentageInt);
+}
+
+static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+	refreshPrefs();
+}
+
+%ctor {
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) PreferencesChangedCallback, CFSTR("com.popsicletreehouse.fivepercentalert.prefschanged"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+	refreshPrefs();
+}

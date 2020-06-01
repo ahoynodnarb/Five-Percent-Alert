@@ -1,7 +1,7 @@
 Package: com.popsicletreehouse.fivepercentalert
-Name: fivepercentalert
+Name: FivePercentAlert
 Depends: mobilesubstrate
-Version: 0.0.1
+Version: 0.0.2
 Architecture: iphoneos-arm
 Description: Show low power alert at whatever battery level you want
 Maintainer: PopsicleTreehouse
