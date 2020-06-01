@@ -14,7 +14,7 @@ static float alertShowPercentage;
 
 	UIDevice *myDevice = [UIDevice currentDevice];
 	BOOL wasEnabled = myDevice.batteryMonitoringEnabled;
-	[myDevice setBatteryMonitoringEnabled:YES];
+	if (!wasEnabled) [myDevice setBatteryMonitoringEnabled:YES];
 	float myDeviceCharge = myDevice.batteryLevel;
 	if (!wasEnabled) [myDevice setBatteryMonitoringEnabled:wasEnabled]; // restore it back to what it was
 
