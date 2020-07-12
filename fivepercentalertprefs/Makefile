@@ -2,7 +2,7 @@ include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = fivepercentalertprefs
 
-fivepercentalertprefs_FILES = PTDRootListController.m
+fivepercentalertprefs_FILES = PTFRootListController.m
 fivepercentalertprefs_INSTALL_PATH = /Library/PreferenceBundles
 fivepercentalertprefs_FRAMEWORKS = UIKit
 fivepercentalertprefs_PRIVATE_FRAMEWORKS = Preferences

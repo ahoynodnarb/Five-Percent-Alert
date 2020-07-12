@@ -9,13 +9,13 @@
 		<key>cell</key>
 		<string>PSLinkCell</string>
 		<key>detail</key>
-		<string>PTDRootListController</string>
+		<string>PTFRootListController</string>
 		<key>icon</key>
 		<string>icon.png</string>
 		<key>isController</key>
 		<true/>
 		<key>label</key>
-		<string>FivePercentAlert</string>
+		<string>fivepercentalertprefs</string>
 	</dict>
 </dict>
 </plist>
